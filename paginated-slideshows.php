@@ -1,12 +1,14 @@
 <?php
 /**
- * Plugin Name:     Paginated Slideshows
- * Plugin URI:      https://website.com
- * Description:     Create paginated slideshows that can easily be attached to one or more posts.
- * Version:         0.1.0
+ * Plugin Name:        Paginated Slideshows
+ * Plugin URI:         https://github.com/bizbudding/paginated-slideshows
+ * Description:        Create paginated slideshows that can easily be attached to one or more posts.
+ * Version:            0.1.0
  *
- * Author:          BizBudding, Mike Hemberger
- * Author URI:      https://bizbudding.com
+ * Author:             BizBudding, Mike Hemberger
+ * Author URI:         https://bizbudding.com
+ *
+ * GitHub Plugin URI:  https://github.com/bizbudding/paginated-slideshows
  */
 
 // Exit if accessed directly.
@@ -135,8 +137,8 @@ final class Paginated_Slideshows_Setup {
 		add_action( 'admin_init',          array( $this, 'updater' ) );
 		add_action( 'init',                array( $this, 'register_content_types' ) );
 		add_action( 'p2p_init',            array( $this, 'register_p2p_connections' ) );
-		add_action( 'acf/save_post',       array( $this, 'update_slideshow_post_data' ), 20 );
-		add_action( 'wp_enqueue_scripts',  array( $this, 'register_script' ) );
+		// add_action( 'acf/save_post',       array( $this, 'update_slideshow_post_data' ), 20 ); // No longer using, easier to tweak if we dynamically build the markup.
+		add_action( 'wp_enqueue_scripts',  array( $this, 'inline_styles' ), 1000 );
 		add_action( 'the_post',            array( $this, 'create_pages' ) );
 
 		register_activation_hook(   __FILE__, array( $this, 'activate' ) );
@@ -151,10 +153,10 @@ final class Paginated_Slideshows_Setup {
 		 *
 		 * @return  void
 		 */
-		// if ( ! class_exists( 'Puc_v4p3_Factory' ) ) {
-		// 	require_once MAI_FAVORITES_PLUGIN_DIR . 'plugin-update-checker/plugin-update-checker.php'; // 4.3.1
-		// }
-		// $updater = Puc_v4p3_Factory::buildUpdateChecker( 'https://github.com/maiprowp/paginated-slideshows/', __FILE__, 'paginated-slideshows' );
+		if ( ! class_exists( 'Puc_v4p3_Factory' ) ) {
+			require_once MAI_FAVORITES_PLUGIN_DIR . 'plugin-update-checker/plugin-update-checker.php'; // 4.3.1
+		}
+		$updater = Puc_v4p3_Factory::buildUpdateChecker( 'https://github.com/bizbudding/paginated-slideshows/', __FILE__, 'paginated-slideshows' );
 	}
 
 	public function register_content_types() {
@@ -240,6 +242,8 @@ final class Paginated_Slideshows_Setup {
 	}
 
 	/**
+	 * NO LONGER USING, BUT SAVING CAUSE IT'S COOL.
+	 *
 	 * Update slideshow meta data into the post content so it's much quicker to load when displaying.
 	 *
 	 * @param  int     $post_id  The post ID.
@@ -528,9 +532,44 @@ final class Paginated_Slideshows_Setup {
 
 	}
 
-	// Register style for use later.
-	public function register_script() {
-		wp_register_style( 'paginated-slideshows', PAGINATED_SLIDESHOWS_URL . 'css/paginated-slideshows.css', array(), PAGINATED_SLIDESHOWS_VERSION );
+	// Output inline styles in the theme.
+	public function inline_styles() {
+
+		// wp_register_style( 'paginated-slideshows', PAGINATED_SLIDESHOWS_URL . 'css/paginated-slideshows.css', array(), PAGINATED_SLIDESHOWS_VERSION );
+
+		$handle  = defined( 'CHILD_THEME_NAME' ) && CHILD_THEME_NAME ? sanitize_title_with_dashes( CHILD_THEME_NAME ) : 'child-theme';
+
+		$css = "
+		.slideshow {
+			border: 1px solid rgba(0,0,0,0.05);
+			border-radius: 3px;
+		}
+		.slideshow-title {
+			background-color: #f1f1f1;
+			font-size: 1.25rem;
+			text-align: center;
+			padding: 16px;
+			margin: 0;
+		}
+		.slideshow-slide {
+			padding: 24px;
+		}
+		.slideshow-pagination {
+			margin-top: 0;
+			margin-bottom: 24px;
+		}
+		.slideshow-pagination ul,
+		.entry-content .slideshow-pagination ul {
+			margin-left: 0;
+		}
+		.slideshow-pagination a {
+			min-width: 120px;
+			font-size: .8rem;
+		}
+		";
+
+		wp_add_inline_style( $handle, $css );
+
 	}
 
 	public function create_pages( $post ) {
