@@ -17,13 +17,13 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 /**
  * Main Paginated_Slideshows_Setup Class.
  *
- * @since 1.0.0
+ * @since 0.1.0
  */
 final class Paginated_Slideshows_Setup {
 
 	/**
 	 * @var Paginated_Slideshows_Setup The one true Paginated_Slideshows_Setup
-	 * @since 1.0.0
+	 * @since 0.1.0
 	 */
 	private static $instance;
 
@@ -33,7 +33,7 @@ final class Paginated_Slideshows_Setup {
 	 * Insures that only one instance of Paginated_Slideshows_Setup exists in memory at any one
 	 * time. Also prevents needing to define globals all over the place.
 	 *
-	 * @since   1.0.0
+	 * @since   0.1.0
 	 * @static  var array $instance
 	 * @uses    Paginated_Slideshows_Setup::setup_constants() Setup the constants needed.
 	 * @uses    Paginated_Slideshows_Setup::includes() Include the required files.
@@ -59,7 +59,7 @@ final class Paginated_Slideshows_Setup {
 	 * The whole idea of the singleton design pattern is that there is a single
 	 * object therefore, we don't want the object to be cloned.
 	 *
-	 * @since   1.0.0
+	 * @since   0.1.0
 	 * @access  protected
 	 * @return  void
 	 */
@@ -71,7 +71,7 @@ final class Paginated_Slideshows_Setup {
 	/**
 	 * Disable unserializing of the class.
 	 *
-	 * @since   1.0.0
+	 * @since   0.1.0
 	 * @access  protected
 	 * @return  void
 	 */
@@ -83,8 +83,8 @@ final class Paginated_Slideshows_Setup {
 	/**
 	 * Setup plugin constants.
 	 *
+	 * @since   0.1.0
 	 * @access  private
-	 * @since   1.0.0
 	 * @return  void
 	 */
 	private function setup_constants() {
@@ -124,8 +124,8 @@ final class Paginated_Slideshows_Setup {
 	/**
 	 * Include required files.
 	 *
+	 * @since   0.1.0
 	 * @access  private
-	 * @since   1.0.0
 	 * @return  void
 	 */
 	private function includes() {
@@ -145,6 +145,13 @@ final class Paginated_Slideshows_Setup {
 		register_deactivation_hook( __FILE__, 'flush_rewrite_rules' );
 	}
 
+	/**
+	 * Initiated the built in plugin updater.
+	 *
+	 * @since  0.1.0
+	 *
+	 * @return void
+	 */
 	public function updater() {
 		/**
 		 * Setup the updater.
@@ -159,6 +166,13 @@ final class Paginated_Slideshows_Setup {
 		$updater = Puc_v4p3_Factory::buildUpdateChecker( 'https://github.com/bizbudding/paginated-slideshows/', __FILE__, 'paginated-slideshows' );
 	}
 
+	/**
+	 * Register the slideshow custom post type.
+	 *
+	 * @since  0.1.0
+	 *
+	 * @return void
+	 */
 	public function register_content_types() {
 
 		/***********************
@@ -196,26 +210,12 @@ final class Paginated_Slideshows_Setup {
 			// 'taxonomies'         => array( 'slideshow_cat' ),
 		) );
 
-		// register_extended_post_type( 'slideshow', array(
-		// 	'menu_position' => 5,
-		// 	'menu_icon'		=> 'dashicons-images-alt2',
-		// 	'admin_cols' 	=> array(
-		// 		'slideshow_to_posts' => array(
-		// 		    'title'      => 'Slideshows',
-		// 		    'connection' => 'slideshow_to_posts',
-		// 		),
-		// 	),
-		// ), array(
-		// 	'singular' => 'Slideshow',
-		// 	'plural'   => 'Slideshows',
-		// ) );
-
 	}
 
 	/**
 	 * Register Posts to Posts connections
 	 *
-	 * @since  1.0.0
+	 * @since  0.1.0
 	 *
 	 * @return void
 	 */
@@ -245,6 +245,8 @@ final class Paginated_Slideshows_Setup {
 	 * NO LONGER USING, BUT SAVING CAUSE IT'S COOL.
 	 *
 	 * Update slideshow meta data into the post content so it's much quicker to load when displaying.
+	 *
+	 * @since  0.1.0
 	 *
 	 * @param  int     $post_id  The post ID.
 	 * @param  object  $post     The post object.
@@ -313,15 +315,16 @@ final class Paginated_Slideshows_Setup {
 	 * This function is especially useful when working with ACF repeater fields and
 	 * flexible content layouts.
 	 *
-	 * @link    https://www.timjensen.us/acf-get-field-alternative/
+	 * @link     https://www.timjensen.us/acf-get-field-alternative/
 	 *
-	 * @version 1.2.5
+	 * @version  1.2.5
+	 * @since   0.1.0
 	 *
-	 * @param  integer  $post_id  Required. Post ID.
-	 * @param  array    $config   Required. An array that represents the structure of
+	 * @param   integer  $post_id  Required. Post ID.
+	 * @param   array    $config   Required. An array that represents the structure of
 	 *                            the custom fields. Follows the same format as the
 	 *                            ACF export field groups array.
-	 * @return array
+	 * @return  array
 	 */
 	function get_field( $post_id, array $config ) {
 
@@ -398,6 +401,13 @@ final class Paginated_Slideshows_Setup {
 		return $results;
 	}
 
+	/**
+	 * Get the ACF field group config.
+	 *
+	 * @since   0.1.0
+	 *
+	 * @return  array  The field group config.
+	 */
 	public function get_config() {
 		return array(
 			array (
@@ -417,6 +427,14 @@ final class Paginated_Slideshows_Setup {
 		);
 	}
 
+	/**
+	 * Register the field group/metabox.
+	 * @uses    Advanced Custom Fields Pro.
+	 *
+	 * @since   0.1.0
+	 *
+	 * @return  void
+	 */
 	public function field_group() {
 
 		if ( ! function_exists( 'acf_add_local_field_group' ) ) {
@@ -532,7 +550,13 @@ final class Paginated_Slideshows_Setup {
 
 	}
 
-	// Output inline styles in the theme.
+	/**
+	 * Output inline styles in the theme.
+	 *
+	 * @since  0.1.0
+	 *
+	 * @return void
+	 */
 	public function inline_styles() {
 
 		// wp_register_style( 'paginated-slideshows', PAGINATED_SLIDESHOWS_URL . 'css/paginated-slideshows.css', array(), PAGINATED_SLIDESHOWS_VERSION );
@@ -572,7 +596,16 @@ final class Paginated_Slideshows_Setup {
 
 	}
 
+	/**
+	 * Get a post's connected slideshow(s)
+	 * and
+	 */
 	public function create_pages( $post ) {
+
+		// Bail if not on a single post.
+		if ( ! is_singular( 'post' ) ) {
+			return;
+		}
 
 		global $pages, $multipage, $numpages;
 
@@ -593,6 +626,7 @@ final class Paginated_Slideshows_Setup {
 		// Get the slides.
 		$slides = $this->get_field( $slideshow->ID, $this->get_config() );
 
+		// Bail if no slides.
 		if ( ! $slides ) {
 			return;
 		}
@@ -604,17 +638,22 @@ final class Paginated_Slideshows_Setup {
 		 */
 		$slides = isset( $slides[ 'slides' ] ) ? $slides[ 'slides' ] : '';
 
+		// Bail if no slides.
 		if ( ! $slides ) {
 			return;
 		}
 
-		add_filter( 'wp_link_pages_link', function( $link ) {
+		/**
+		 * Filter the prev/next page links to add the #slideshow hash.
+		 * @return html
+		 */
+		add_filter( 'wp_link_pages_link', 'ps_add_slideshow_hash' );
+		function ps_add_slideshow_hash( $link ) {
 			return str_replace( '/">', '/#slideshow">', $link );
-		});
+		}
 
+		// Remove the default Genesis post pagination.
 		remove_action( 'genesis_entry_content', 'genesis_do_post_content_nav', 12 );
-
-		wp_enqueue_style( 'paginated-slideshows' );
 
 		$count       = count( $slides );
 		$total_pages = count( $pages ) + $count;
@@ -626,7 +665,7 @@ final class Paginated_Slideshows_Setup {
 		}
 
 		// Loop through pages.
-		foreach ( $slides as $slide ) {
+		foreach ( (array) $slides as $slide ) {
 			// Prevent building a page that doesn't exist yet.
 			if ( isset( $pages[$page_index] ) ) {
 				$pages[$page_index] = $pages[$page_index];
@@ -658,6 +697,13 @@ final class Paginated_Slideshows_Setup {
 
 	}
 
+	/**
+	 * Activate, register content types and flush permalinks.
+	 *
+	 * @since  0.1.0
+	 *
+	 * @return void
+	 */
 	public function activate() {
 		$this->register_content_types();
 		flush_rewrite_rules();
@@ -676,7 +722,7 @@ final class Paginated_Slideshows_Setup {
  *
  * Example: <?php $plugin = Paginated_Slideshows(); ?>
  *
- * @since 1.0.0
+ * @since 0.1.0
  *
  * @return object|Paginated_Slideshows_Setup The one true Paginated_Slideshows_Setup Instance.
  */
