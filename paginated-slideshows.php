@@ -160,10 +160,11 @@ final class Paginated_Slideshows_Setup {
 		 *
 		 * @return  void
 		 */
-		if ( ! class_exists( 'Puc_v4p3_Factory' ) ) {
-			require_once MAI_FAVORITES_PLUGIN_DIR . 'plugin-update-checker/plugin-update-checker.php'; // 4.3.1
+		if ( ! class_exists( 'Puc_v4_Factory' ) ) {
+			require_once PAGINATED_SLIDESHOWS_INCLUDES_DIR . 'vendor/plugin-update-checker/plugin-update-checker.php'; // 4.3.1
+		} else {
+			$updater = Puc_v4_Factory::buildUpdateChecker( 'https://github.com/bizbudding/paginated-slideshows/', __FILE__, 'paginated-slideshows' );
 		}
-		$updater = Puc_v4p3_Factory::buildUpdateChecker( 'https://github.com/bizbudding/paginated-slideshows/', __FILE__, 'paginated-slideshows' );
 	}
 
 	/**
@@ -655,11 +656,12 @@ final class Paginated_Slideshows_Setup {
 		// Remove the default Genesis post pagination.
 		remove_action( 'genesis_entry_content', 'genesis_do_post_content_nav', 12 );
 
-		$count       = count( $slides );
-		$total_pages = count( $pages ) + $count;
-		$page_index  = count( $pages ) - 1;
+		$total_slides = count( $slides );
+		$total_pages  = count( $pages ) + $total_slides - 1; // Total pages plus the total slides, minus 1 (since the first slide is on the first page).
+		$page_index   = count( $pages ) - 1;
 
-		if ( $count > 1 ) {
+		// If we have more than 1 slide, update the globals.
+		if ( $total_slides > 1 ) {
 			$multipage = true;
 			$numpages  = $total_pages;
 		}
