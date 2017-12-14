@@ -1,0 +1,31 @@
+.slideshow {
+	border: 1px solid rgba(0,0,0,0.05);
+	border-radius: 3px;
+}
+
+.slideshow-title {
+	background-color: #f1f1f1;
+	font-size: 1.25rem;
+	text-align: center;
+	padding: 16px;
+	margin: 0;
+}
+
+.slideshow-slide {
+	padding: 24px;
+}
+
+.slideshow-pagination {
+	margin-top: 0;
+	margin-bottom: 24px;
+}
+
+.slideshow-pagination ul,
+.entry-content .slideshow-pagination ul {
+	margin-left: 0;
+}
+
+.slideshow-pagination a {
+	min-width: 120px;
+	font-size: .8rem;
+}
