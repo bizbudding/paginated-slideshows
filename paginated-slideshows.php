@@ -3,7 +3,7 @@
  * Plugin Name:        Paginated Slideshows
  * Plugin URI:         https://github.com/bizbudding/paginated-slideshows
  * Description:        Create paginated slideshows that can easily be attached to one or more posts.
- * Version:            0.1.0
+ * Version:            0.2.0
  *
  * Author:             BizBudding, Mike Hemberger
  * Author URI:         https://bizbudding.com
@@ -91,7 +91,7 @@ final class Paginated_Slideshows_Setup {
 
 		// Plugin version.
 		if ( ! defined( 'PAGINATED_SLIDESHOWS_VERSION' ) ) {
-			define( 'PAGINATED_SLIDESHOWS_VERSION', '0.1.0' );
+			define( 'PAGINATED_SLIDESHOWS_VERSION', '0.2.0' );
 		}
 
 		// Plugin Folder Path.
@@ -137,6 +137,8 @@ final class Paginated_Slideshows_Setup {
 		add_action( 'admin_init',          array( $this, 'updater' ) );
 		add_action( 'init',                array( $this, 'register_content_types' ) );
 		add_action( 'p2p_init',            array( $this, 'register_p2p_connections' ) );
+		add_action('acf/init',             array( $this, 'field_group' ) );
+
 		// add_action( 'acf/save_post',       array( $this, 'update_slideshow_post_data' ), 20 ); // No longer using, easier to tweak if we dynamically build the markup.
 		add_action( 'wp_enqueue_scripts',  array( $this, 'inline_styles' ), 1000 );
 		add_action( 'the_post',            array( $this, 'create_pages' ) );
@@ -437,10 +439,6 @@ final class Paginated_Slideshows_Setup {
 	 * @return  void
 	 */
 	public function field_group() {
-
-		if ( ! function_exists( 'acf_add_local_field_group' ) ) {
-			return;
-		}
 
 		acf_add_local_field_group( array(
 			'key'    => 'group_5a314dee51d76',
