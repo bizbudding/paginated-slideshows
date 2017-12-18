@@ -91,7 +91,7 @@ final class Paginated_Slideshows_Setup {
 
 		// Plugin version.
 		if ( ! defined( 'PAGINATED_SLIDESHOWS_VERSION' ) ) {
-			define( 'PAGINATED_SLIDESHOWS_VERSION', '0.1.0' );
+			define( 'PAGINATED_SLIDESHOWS_VERSION', '0.2.0' );
 		}
 
 		// Plugin Folder Path.
