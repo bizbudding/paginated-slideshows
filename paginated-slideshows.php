@@ -3,7 +3,7 @@
  * Plugin Name:        Paginated Slideshows
  * Plugin URI:         https://github.com/bizbudding/paginated-slideshows
  * Description:        Create paginated slideshows that can easily be attached to one or more posts.
- * Version:            0.2.0
+ * Version:            0.2.1
  *
  * Author:             BizBudding, Mike Hemberger
  * Author URI:         https://bizbudding.com
@@ -91,7 +91,7 @@ final class Paginated_Slideshows_Setup {
 
 		// Plugin version.
 		if ( ! defined( 'PAGINATED_SLIDESHOWS_VERSION' ) ) {
-			define( 'PAGINATED_SLIDESHOWS_VERSION', '0.2.0' );
+			define( 'PAGINATED_SLIDESHOWS_VERSION', '0.2.1' );
 		}
 
 		// Plugin Folder Path.
@@ -597,9 +597,16 @@ final class Paginated_Slideshows_Setup {
 
 	/**
 	 * Get a post's connected slideshow(s)
-	 * and
+	 * and display them.
+	 *
+	 * @return void
 	 */
 	public function create_pages( $post ) {
+
+		// Bail if Posts 2 Posts is not active.
+		if ( ! function_exists( 'p2p_type' ) ) {
+			return;
+		}
 
 		// Bail if not on a single post.
 		if ( ! is_singular( 'post' ) ) {
