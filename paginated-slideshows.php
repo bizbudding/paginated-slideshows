@@ -3,7 +3,7 @@
  * Plugin Name:        Paginated Slideshows
  * Plugin URI:         https://github.com/bizbudding/paginated-slideshows
  * Description:        Create paginated slideshows that can easily be attached to one or more posts.
- * Version:            0.2.1
+ * Version:            0.2.2
  *
  * Author:             BizBudding, Mike Hemberger
  * Author URI:         https://bizbudding.com
@@ -91,7 +91,7 @@ final class Paginated_Slideshows_Setup {
 
 		// Plugin version.
 		if ( ! defined( 'PAGINATED_SLIDESHOWS_VERSION' ) ) {
-			define( 'PAGINATED_SLIDESHOWS_VERSION', '0.2.1' );
+			define( 'PAGINATED_SLIDESHOWS_VERSION', '0.2.2' );
 		}
 
 		// Plugin Folder Path.
@@ -653,10 +653,13 @@ final class Paginated_Slideshows_Setup {
 		 * Filter the prev/next page links to add the #slideshow hash.
 		 * @return html
 		 */
-		add_filter( 'wp_link_pages_link', 'ps_add_slideshow_hash' );
-		function ps_add_slideshow_hash( $link ) {
+		add_filter( 'wp_link_pages_link', function( $link ) {
+			$jump_to_hash = apply_filters( 'ps_add_slideshow_hash', true );
+			if ( ! $jump_to_hash ) {
+				return;
+			}
 			return str_replace( '/">', '/#slideshow">', $link );
-		}
+		});
 
 		// Remove the default Genesis post pagination.
 		remove_action( 'genesis_entry_content', 'genesis_do_post_content_nav', 12 );
@@ -684,7 +687,7 @@ final class Paginated_Slideshows_Setup {
 				$pages[$page_index] .= '<div class="slideshow-slide">';
 					$pages[$page_index] .= $slide['title'] ? '<h3 class="slide-title">' . esc_html( $slide['title'] ) . '</h3>' : '';
 					$pages[$page_index] .= $slide['image'] ? '<p class="slide-image">' . wp_get_attachment_image( $slide['image'], 'featured' ) . '</p>' : '';
-					$pages[$page_index] .= $slide['content'] ? apply_filters( 'the_content', $slide['content'] ) : '';
+					$pages[$page_index] .= $slide['content'] ? wp_kses_post( $slide['content'] ) : '';
 				$pages[$page_index] .= '</div>';
 				$pages[$page_index] .= wp_link_pages( array(
 					'before'           => '<div class="slideshow-pagination archive-pagination pagination">',
